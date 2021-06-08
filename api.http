@@ -1,8 +1,7 @@
 http://localhost:5000/api/accounts/christopher
 
 ###
-http://localhost:5000/api/accounts/noOne
-
+GET http://localhost:5000/api/accounts/steve
 
 ###
 POST http://localhost:5000/api/accounts
@@ -13,3 +12,14 @@ Content-Type: application/json
    "currency": "EUR",
    "balance": 500
 }
+
+###
+PUT http://localhost:5000/api/accounts/christopher
+Content-Type: application/json
+
+{
+   "currency": "EUR"
+}
+
+###
+DELETE http://localhost:5000/api/accounts/steve
