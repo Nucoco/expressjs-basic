@@ -8,8 +8,10 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const package = require("./package.json");
 
 const port = process.env.port || process.env.PORT || 5000;
+const apiRoot = "/api";
 
 const app = express();
 // configure app
