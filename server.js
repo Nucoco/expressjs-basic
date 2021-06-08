@@ -34,6 +34,7 @@ const db = {
 };
 
 // configure routes
+// GET
 const router = express.Router();
 router.get("/", (req, res) => {
 	res.send(`${package.description} - v${package.version}`);
@@ -50,6 +51,7 @@ router.get("/accounts/:user", (req, res) => {
 	return res.json(account);
 });
 
+// POST
 router.post("/accounts", (req, res) => {
 	// Normally at first, parse request object including json payload sent from client. But it's done by body-parser in above.
 	const body = req.body;
@@ -85,6 +87,50 @@ router.post("/accounts", (req, res) => {
 
 	// return the account
 	return res.status(201).json(account);
+});
+
+// PUT
+// put() get data from body and URL
+router.put("/accounts/:user", (req, res) => {
+	const body = req.body;
+	const user = req.params.user;
+	const account = db[user];
+
+	if (!account) {
+		return res.json(404).json({ error: "User not found" });
+	}
+
+	// validate only certain items editable
+	if (body.user || body.balance || body.transaction) {
+		return res.status(400).json({ error: "Can only edit currency and description" });
+	}
+
+	// update as necessary
+	if (body.description) {
+		account.description = body.description;
+	}
+	if (body.currency) {
+		account.currency = body.currency;
+	}
+
+	// success code
+	return res.status(201).json(account);
+});
+
+// DELETE
+router.delete("/accounts/:user", (req, res) => {
+	const user = req.params.user;
+	const account = db[user];
+
+	if (!account) {
+		return res.status(404).json({ error: "User not found" });
+	}
+
+	// In this app, use in-memory object for storing. So to delete it, use delete statement.
+	delete db[user];
+
+	// 204 means No content
+	return res.status(204);
 });
 
 // register all our routes
